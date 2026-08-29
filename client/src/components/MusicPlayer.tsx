@@ -66,7 +66,7 @@ export default function MusicPlayer() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-52 retro-window border-blossom shadow-xl">
+    <div className="fixed bottom-4 right-4 z-50 w-44 sm:w-52 retro-window border-blossom shadow-xl">
       <div className="window-titlebar bg-blossom text-white">
         <span className="font-chrome text-[10px]">beemify radio</span>
         <div className="window-controls">

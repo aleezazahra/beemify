@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { SavedSession } from '../types'
+import { DraggableWindow } from './DraggableWindow'
 
 interface LandingProps {
   onStart: () => void
@@ -49,160 +51,174 @@ function BeeAvatar() {
 }
 
 export default function Landing({ onStart, history, onOpenSession, onRemoveSession }: LandingProps) {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
   return (
     <div className="space-y-4">
-      <div className="grid md:grid-cols-2 gap-4 items-stretch">
-      <div className="retro-window flex flex-col">
-        <div className="window-titlebar bg-blossom">
-          <a
-            href="https://github.com/aleezazahra"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-white hover:opacity-80 transition-opacity"
-          >
-            <GitHubIcon />
-            <span className="text-xs">@aleezazahra</span>
-          </a>
-          <div className="flex items-center gap-3 ml-auto">
-            <h1 className="font-chrome text-sm font-bold text-white tracking-wider">
-              beemify
-            </h1>
-            <div className="window-controls">
-              <button
-                type="button"
-                aria-label="Minimize"
-                className="w-4 h-4 flex items-center justify-center text-white text-[10px] font-bold hover:bg-white/25 rounded-sm transition-colors cursor-default"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="w-2.5 h-2.5" aria-hidden="true">
-                  <path d="M5 12h14" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                aria-label="Close"
-                className="w-4 h-4 flex items-center justify-center text-white hover:bg-white/25 rounded-sm transition-colors cursor-default"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="w-2.5 h-2.5" aria-hidden="true">
-                  <path d="M6 6l12 12M18 6L6 18" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-8 text-center space-y-6 flex-1 flex flex-col justify-center">
-          <BeeAvatar />
-
-          <div>
-            <h2 className="font-display text-3xl font-bold text-gray-800 mb-2">
-              Plan your perfect day
-            </h2>
-            <p className="font-body text-sm text-gray-600 max-w-md mx-auto">
-              Tell the little bee about your mood and energy, and it will
-              buzz back with a cozy 24-hour plan made just for you.
-            </p>
-          </div>
-
-          <button onClick={onStart} className="retro-button-primary">
-            Get Started
-          </button>
-        </div>
-      </div>
-
-      <div className="retro-window flex flex-col">
-        <div className="window-titlebar bg-marigold">
-          <div className="flex items-center gap-2 flex-1">
-            <span>how it works</span>
-          </div>
-          <div className="window-controls">
-            <div className="control-dot" />
-            <div className="control-dot" />
-            <div className="control-dot" />
-          </div>
-        </div>
-        <div className="p-5 space-y-4">
-          <p className="font-body text-sm text-gray-700 leading-relaxed">
-            beemify turns a quick note about your day into a full 24-hour
-            schedule. Write anything: how you feel, how much energy you have,
-            what you absolutely must get done, or nothing at all. The little
-            bee reads it and plans around your life.
-          </p>
-          <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <span className="shrink-0 w-6 h-6 bg-blossom text-white font-chrome text-[10px] flex items-center justify-center rounded-full">1</span>
-              <p className="font-body text-sm text-gray-700 leading-relaxed">
-                <span className="font-bold">Describe your day.</span> Type a few
-                lines about your mood, energy, plans, and must-dos. There is no
-                wrong way to write it.
-              </p>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="shrink-0 w-6 h-6 bg-blossom text-white font-chrome text-[10px] flex items-center justify-center rounded-full">2</span>
-              <p className="font-body text-sm text-gray-700 leading-relaxed">
-                <span className="font-bold">Get your plan.</span> The AI buzzes
-                back with a realistic, time-blocked schedule and a warm summary
-                that understands how you feel.
-              </p>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="shrink-0 w-6 h-6 bg-blossom text-white font-chrome text-[10px] flex items-center justify-center rounded-full">3</span>
-              <p className="font-body text-sm text-gray-700 leading-relaxed">
-                <span className="font-bold">Live your day.</span> Check blocks
-                off as you go, track your progress bar, regenerate any block you
-                do not vibe with, and revisit old plans anytime below.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-
-      {history.length > 0 && (
-        <div className="retro-window">
-          <div className="window-titlebar bg-mint">
-            <div className="flex items-center gap-2 flex-1">
-              <span>past plans</span>
-            </div>
-            <div className="window-controls">
-              <div className="control-dot" />
-              <div className="control-dot" />
-              <div className="control-dot" />
-            </div>
-          </div>
-          <div className="p-3 space-y-2">
-            {history.map((session) => (
-              <div
-                key={session.savedAt}
-                className="flex items-center gap-2 bg-pistachio/30 border-2 border-white rounded p-2"
-              >
+      <DraggableWindow defaultX={isMobile ? 0.1 : 0.18} defaultY={0.04} zIndex={20}>
+        <div className="retro-window flex flex-col">
+          <div className="window-titlebar bg-blossom">
+            <a
+              href="https://github.com/aleezazahra"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-white hover:opacity-80 transition-opacity"
+            >
+              <GitHubIcon />
+              <span className="text-xs">@aleezazahra</span>
+            </a>
+            <div className="flex items-center gap-3 ml-auto">
+              <h1 className="font-chrome text-sm font-bold text-white tracking-wider">
+                beemify
+              </h1>
+              <div className="window-controls">
                 <button
-                  onClick={() => onOpenSession(session)}
-                  className="flex-1 min-w-0 text-left font-body text-xs text-gray-700 hover:text-gray-900 transition-colors"
-                  title={session.description}
+                  type="button"
+                  aria-label="Minimize"
+                  className="w-4 h-4 flex items-center justify-center text-white text-[10px] font-bold hover:bg-white/25 rounded-sm transition-colors cursor-default"
                 >
-                  <span className="font-chrome text-[10px] text-gray-500 mr-2">
-                    {new Date(session.savedAt).toLocaleDateString()}
-                  </span>
-                  {session.plan.summary.length > 70
-                    ? `${session.plan.summary.slice(0, 70)}...`
-                    : session.plan.summary}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="w-2.5 h-2.5" aria-hidden="true">
+                    <path d="M5 12h14" />
+                  </svg>
                 </button>
                 <button
-                  onClick={() => onRemoveSession(session.savedAt)}
-                  aria-label="Remove session"
-                  className="w-5 h-5 shrink-0 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors"
+                  type="button"
+                  aria-label="Close"
+                  className="w-4 h-4 flex items-center justify-center text-white hover:bg-white/25 rounded-sm transition-colors cursor-default"
                 >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="w-3 h-3" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="w-2.5 h-2.5" aria-hidden="true">
                     <path d="M6 6l12 12M18 6L6 18" />
                   </svg>
                 </button>
               </div>
-            ))}
+            </div>
+          </div>
+
+          <div className="p-8 text-center space-y-6 flex-1 flex flex-col justify-center">
+            <BeeAvatar />
+
+            <div>
+              <h2 className="font-display text-3xl font-bold text-gray-800 mb-2">
+                Plan your perfect day
+              </h2>
+              <p className="font-body text-sm text-gray-600 max-w-md mx-auto">
+                Tell the little bee about your mood and energy, and it will
+                buzz back with a cozy 24-hour plan made just for you.
+              </p>
+            </div>
+
+            <button onClick={onStart} className="retro-button-primary">
+              Get Started
+            </button>
+          </div>
+        </div>
+      </DraggableWindow>
+
+      <DraggableWindow defaultX={isMobile ? 0.1 : 0.55} defaultY={0.3} zIndex={15}>
+        <div className="retro-window flex flex-col">
+          <div className="window-titlebar bg-marigold">
+            <div className="flex items-center gap-2 flex-1">
+              <span>how it works</span>
+            </div>
+            <div className="window-controls">
+              <div className="control-dot" />
+              <div className="control-dot" />
+              <div className="control-dot" />
+            </div>
+          </div>
+          <div className="p-5 space-y-4">
+            <p className="font-body text-sm text-gray-700 leading-relaxed">
+              beemify turns a quick note about your day into a full 24-hour
+              schedule. Write anything: how you feel, how much energy you have,
+              what you absolutely must get done, or nothing at all. The little
+              bee reads it and plans around your life.
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <span className="shrink-0 w-6 h-6 bg-blossom text-white font-chrome text-[10px] flex items-center justify-center rounded-full">1</span>
+                <p className="font-body text-sm text-gray-700 leading-relaxed">
+                  <span className="font-bold">Describe your day.</span> Type a few
+                  lines about your mood, energy, plans, and must-dos. There is no
+                  wrong way to write it.
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="shrink-0 w-6 h-6 bg-blossom text-white font-chrome text-[10px] flex items-center justify-center rounded-full">2</span>
+                <p className="font-body text-sm text-gray-700 leading-relaxed">
+                  <span className="font-bold">Get your plan.</span> The AI buzzes
+                  back with a realistic, time-blocked schedule and a warm summary
+                  that understands how you feel.
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="shrink-0 w-6 h-6 bg-blossom text-white font-chrome text-[10px] flex items-center justify-center rounded-full">3</span>
+                <p className="font-body text-sm text-gray-700 leading-relaxed">
+                  <span className="font-bold">Live your day.</span> Check blocks
+                  off as you go, track your progress bar, regenerate any block you
+                  do not vibe with, and revisit old plans anytime below.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </DraggableWindow>
+
+      {history.length > 0 && (
+        <div className="pt-20">
+          <div className="retro-window">
+            <div className="window-titlebar bg-mint">
+              <div className="flex items-center gap-2 flex-1">
+                <span>past plans</span>
+              </div>
+              <div className="window-controls">
+                <div className="control-dot" />
+                <div className="control-dot" />
+                <div className="control-dot" />
+              </div>
+            </div>
+            <div className="p-3 space-y-2">
+              {history.map((session) => (
+                <div
+                  key={session.savedAt}
+                  className="flex items-center gap-2 bg-pistachio/30 border-2 border-white rounded p-2"
+                >
+                  <button
+                    onClick={() => onOpenSession(session)}
+                    className="flex-1 min-w-0 text-left font-body text-xs text-gray-700 hover:text-gray-900 transition-colors"
+                    title={session.description}
+                  >
+                    <span className="font-chrome text-[10px] text-gray-500 mr-2">
+                      {new Date(session.savedAt).toLocaleDateString()}
+                    </span>
+                    {session.plan.summary.length > 70
+                      ? `${session.plan.summary.slice(0, 70)}...`
+                      : session.plan.summary}
+                  </button>
+                  <button
+                    onClick={() => onRemoveSession(session.savedAt)}
+                    aria-label="Remove session"
+                    className="w-5 h-5 shrink-0 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="w-3 h-3" aria-hidden="true">
+                      <path d="M6 6l12 12M18 6L6 18" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      <p className="text-center font-body text-xs text-gray-500">
+      <p className="text-center font-body text-xs text-gray-500 pt-10">
         made with
         <HeartIcon />
         by aleeza

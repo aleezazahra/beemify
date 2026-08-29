@@ -1,10 +1,12 @@
 # Beamify - perfect day generator 
 
 A kawaii retro-styled web app that generates personalized 24-hour day plans using AI.
-## Tech Stack 
+Theme was a perfect day so tried to make a productivity app and integrated AI(not ur usual GPT wrapper)
 
+
+## Tech Stack 
 Frontend : Reactjs , tailwindCSS
-Backend: Nodejs, expressjs , Openrouter
+Backend: Nodejs, expressjs , Openrouter API
 
 ## Project Structure
 
@@ -66,7 +68,15 @@ perfect-day-generator/
 - AI integration (Openrouter api)
 - responsive for both phones and desktop
 - deployed on vercel
+- A music player with royalty free music
 - has cool music player from the internet
+- moveable windows
+
+# Screenshots
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
+
 
 # AI usage
 due to shortage of time used AI in debugging stuff in backend 
