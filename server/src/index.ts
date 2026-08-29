@@ -18,8 +18,12 @@ app.use(cors())
 app.use(express.json())
 app.use('/api', dayRoutes)
 
-app.listen(PORT, () => {
-  console.log(`Perfect Day Generator server running on port ${PORT}`)
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
-  console.log(`Model: ${process.env.MODEL || 'meta-llama/llama-3.3-70b-instruct'}`)
-})
+export default app
+
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Perfect Day Generator server running on port ${PORT}`)
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
+    console.log(`Model: ${process.env.MODEL || 'meta-llama/llama-3.3-70b-instruct'}`)
+  })
+}

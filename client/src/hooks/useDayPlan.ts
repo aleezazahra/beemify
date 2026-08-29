@@ -3,6 +3,7 @@ import { DayPlan, DayInputState, SavedSession } from '../types'
 
 const HISTORY_KEY = 'beemify-history'
 const HISTORY_LIMIT = 6
+const API_URL = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
 
 function loadHistory(): SavedSession[] {
   try {
@@ -28,7 +29,7 @@ export function useDayPlan() {
   const generateDay = useCallback(async (description: string) => {
     setState({ status: 'loading', data: null, error: null })
     try {
-      const response = await fetch('/api/generate-day', {
+      const response = await fetch(`${API_URL}/api/generate-day`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ description }),
@@ -60,7 +61,7 @@ export function useDayPlan() {
       const oldPlan = state.data
       setState((prev) => ({ ...prev, status: 'loading' }))
       try {
-        const response = await fetch('/api/regenerate-block', {
+        const response = await fetch(`${API_URL}/api/regenerate-block`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
