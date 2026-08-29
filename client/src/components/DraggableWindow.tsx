@@ -44,10 +44,12 @@ export function DraggableWindow({
   useEffect(() => {
     if (!dragging) return
     const onMove = (e: PointerEvent) => {
+      const el = elRef.current
+      if (!el) return
       const dx = e.clientX - startPos.current.x
       const dy = e.clientY - startPos.current.y
-      const w = elRef.current.offsetWidth
-      const h = elRef.current.offsetHeight
+      const w = el.offsetWidth
+      const h = el.offsetHeight
       setPos({
         x: Math.max(0, Math.min(window.innerWidth - w, dragOffset.current.x + dx)),
         y: Math.max(0, Math.min(window.innerHeight - h, dragOffset.current.y + dy)),

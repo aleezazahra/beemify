@@ -172,7 +172,7 @@ export default function Landing({ onStart, history, onOpenSession, onRemoveSessi
       </DraggableWindow>
 
       {history.length > 0 && (
-        <div className="pt-20">
+        <DraggableWindow defaultX={isMobile ? 0.5 : 0.32} defaultY={0.62} zIndex={10}>
           <div className="retro-window">
             <div className="window-titlebar bg-mint">
               <div className="flex items-center gap-2 flex-1">
@@ -215,7 +215,7 @@ export default function Landing({ onStart, history, onOpenSession, onRemoveSessi
               ))}
             </div>
           </div>
-        </div>
+        </DraggableWindow>
       )}
 
       <p className="text-center font-body text-xs text-gray-500 pt-10">
