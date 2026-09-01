@@ -1,7 +1,7 @@
 # Beamify - perfect day generator 
 
 A kawaii retro-styled web app that generates personalized 24-hour day plans using AI.
-Theme was a perfect day so tried to make a productivity app and integrated AI(not ur usual GPT wrapper)
+productivity app and integrated AI(not ur usual GPT wrapper)
 
 
 ## Tech Stack 
@@ -75,7 +75,4 @@ perfect-day-generator/
 
 
 # AI usage
-due to shortage of time used AI in debugging stuff in backend 
-
-## Credits and Usage
-open-source project made for sunbeam islamabad 
+used in debugging 
